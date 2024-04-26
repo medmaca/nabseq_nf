@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/nf-core/template/master/nextflow_schema.json",
+  "title": "NAB-seq pipeline",
+  "description": "NAb-seq is an accurate, rapid and cost-effective method for antibody long-read sequencing in hybridoma cell lines and single B cells.",
+  "type": "object",
+  "definitions": {
+    "required_arguments": {
+      "title": "Required arguments",
+      "type": "object",
+      "description": "",
+      "default": "",
+      "properties": {
+        "fastq_dir": {
+          "type": "string",
+          "description": "where the input fastq files are located",
+          "format": "directory-path"
+        },
+        "out_dir": {
+          "type": "string",
+          "description": "where the output files will be written to",
+          "format": "directory-path"
+        },
+        "sample_sheet": {
+          "type": "string",
+          "description": "location of the .csv sample sheet",
+          "pattern": "^\\S+\\.csv$",
+          "format": "file-path"
+        }
+      },
+      "required": [
+        "fastq_dir",
+        "out_dir",
+        "sample_sheet"
+      ]
+    },
+    "optional_arguments": {
+      "title": "Optional arguments",
+      "type": "object",
+      "description": "",
+      "default": "",
+      "properties": {
+        "barcode_dirs": {
+          "type": "boolean",
+          "help_text": "nanopore reads. NAb-seq expects either:\n - (default) A directory containing all fastqs, starting with barcode names (e.g. barcode01_pass.fq.gz)\n - (using --barcode_dirs TRUE) A directory containing a folder for each barcode name, which can contain as many different fastqs as you like\n - For more detailed information, see the tutorial website (https://github.com/kzeglinski/nabseq_nf)",
+          "description": "If True then in fastq_dir folder can contain a folder for each barcode name, else expects a single directory containing all fastq files"
+        },
+        "num_consensus": {
+          "type": "integer",
+          "default": 999,
+          "description": "maximum number of consensus sequences to generate for each sample"
+        },
+        "igblast_databases": {
+          "type": "string",
+          "default": "/root/MySoftware/nabseq_nf/references/igblast/",
+          "description": "location of the igblast databases",
+          "format": "directory-path"
+        },
+        "reference_sequences": {
+          "type": "string",
+          "default": "/root/MySoftware/nabseq_nf/references/reference_sequences/",
+          "description": "location of the reference sequences",
+          "format": "directory-path"
+        },
+        "trim_3p": {
+          "type": "string",
+          "default": "A{20}N{90}",
+          "description": "pattern for cutadapt to trim off the 3' end"
+        },
+        "trim_5p": {
+          "type": "string",
+          "default": "TTTCTGTTGGTGCTGATATTGCTTT",
+          "description": "pattern for cutadapt to trim off the 5' end"
+        },
+        "medaka_model": {
+          "type": "string",
+          "default": "r941_min_sup_g507",
+          "description": "model to use for medaka (depends on your basecalling model, default:\"r941_min_sup_g507\")"
+        },
+        "trim_to_antibody": {
+          "type": "boolean",
+          "default": true,
+          "description": "Trim sequences to only contain from the start of the V region to the end of the C region"
+        }
+      }
+    },
+    "generic_options": {
+      "title": "Generic options",
+      "type": "object",
+      "fa_icon": "fas fa-file-import",
+      "description": "Less common options for the pipeline, typically set in a config file.",
+      "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
+      "properties": {
+        "help": {
+          "type": "boolean",
+          "description": "Display help text.",
+          "fa_icon": "fas fa-question-circle",
+          "hidden": true
+        },
+        "enable_conda": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/definitions/required_arguments"
+    },
+    {
+      "$ref": "#/definitions/optional_arguments"
+    },
+    {
+      "$ref": "#/definitions/generic_options"
+    }
+  ]
+}
