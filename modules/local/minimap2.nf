@@ -43,6 +43,7 @@ process minimap2_alignment {
         "${reference ?: reads}" \\
         "$reads" \\
         -o ${prefix}.sam \\
+        --sam-hit-only \\
         -a
     """
 }
