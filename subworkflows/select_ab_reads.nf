@@ -13,8 +13,8 @@ process subset_aligned_reads {
     //     'quay.io/biocontainers/seqkit:2.3.1--h9ee0642_0' }"
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-    'https://depot.galaxyproject.org/singularity/samtools:0.1.19--3' :
-    'quay.io/biocontainers/samtools:0.1.19--3'}"
+    'https://depot.galaxyproject.org/singularity/samtools:1.20--h50ea8bc_1' :
+    'quay.io/biocontainers/samtools:1.20--h50ea8bc_1' }"
 
     input:
     tuple val(meta), path(sam_file), path(reads)
