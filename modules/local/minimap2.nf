@@ -10,8 +10,8 @@ process minimap2_alignment {
 
     conda (params.enable_conda ? 'bioconda::minimap2=2.24' : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/minimap2%3A2.24--h7132678_1' :
-        'quay.io/biocontainers/minimap2:2.24--h7132678_1' }"
+        'https://depot.galaxyproject.org/singularity/samtools:1.20--h50ea8bc_1' :
+        'quay.io/biocontainers/samtools:1.20--h50ea8bc_1' }"
 
     input:
     tuple val(meta), path(reads)
