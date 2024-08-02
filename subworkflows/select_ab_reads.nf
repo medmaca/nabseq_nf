@@ -8,12 +8,16 @@ process subset_aligned_reads {
     label 'process_high'
 
     conda (params.enable_conda ? 'bioconda::seqkit=2.3.1' : null)
+    // container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    //     'https://depot.galaxyproject.org/singularity/seqkit%3A2.3.1--h9ee0642_0' :
+    //     'quay.io/biocontainers/seqkit:2.3.1--h9ee0642_0' }"
+
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/seqkit%3A2.3.1--h9ee0642_0' :
-        'quay.io/biocontainers/seqkit:2.3.1--h9ee0642_0' }"
+    'https://depot.galaxyproject.org/singularity/samtools:0.1.19--3' :
+    'quay.io/biocontainers/samtools:0.1.19--3'}"
 
     input:
-    tuple val(meta), path(paf_file), path(reads)
+    tuple val(meta), path(sam_file), path(reads)
 
     output:
     tuple val(meta), path("*_ab_reads.fastq")
@@ -29,13 +33,16 @@ process subset_aligned_reads {
 
     """
     # aligned read names are the first column of the PAF file
-    cut -f1 $paf_file > "${prefix}_ab_read_names.txt"
+    # cut -f1 $sam_file > "${prefix}_ab_read_names.txt"
     
     # use these names as a pattern for seqkit grep to find
-    seqkit grep --by-name --use-regexp --threads ${task.cpus} \
-    -f "${prefix}_ab_read_names.txt" \
-    $reads \
-    -o "${prefix}_ab_reads.fastq"
+    # seqkit grep --by-name --use-regexp --threads ${task.cpus} \
+    #-f "${prefix}_ab_read_names.txt" \
+    #$reads \
+    # -o "${prefix}_ab_reads.fastq"
+
+    samtools fastq -@ ${task.cpus} $sam_file > ${prefix}_ab_reads.fastq
+
     """
 
 }

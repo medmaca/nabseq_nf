@@ -18,8 +18,8 @@ process minimap2_alignment {
     path reference
 
     output:
-    tuple val(meta), path("*.paf"), path(reads), optional: true, emit: paf_reads
-    tuple val(meta), path(reads), path(reference), path("*.paf"), optional: true, emit: for_racon
+    tuple val(meta), path("*.sam"), path(reads), optional: true, emit: paf_reads
+    tuple val(meta), path(reads), path(reference), path("*.sam"), optional: true, emit: for_racon
 
     when:
     task.ext.when == null || task.ext.when
@@ -42,7 +42,7 @@ process minimap2_alignment {
         -x map-ont \\
         "${reference ?: reads}" \\
         "$reads" \\
-        -o ${prefix}.paf
-
+        -o ${prefix}.sam \\
+        -a
     """
 }
